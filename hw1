@@ -1,0 +1,97 @@
+create database if not exists Cars;
+use Cars;
+create table car
+(
+    id    int primary key not null auto_increment,
+    year  int          default null,
+    price int          default null,
+    mark  varchar(255) default null
+);
+insert into car(year, price, mark)
+values (2006, 6000, 'AUDI'),
+       (2022, 20000, 'AUDI')
+;
+select *
+from car
+where year < 2000;
+
+select *
+from car
+where year > 2015;
+
+# знайти всі машини з цих  років2008, 2009, 2010
+select *
+from car
+where year between 2008 and 2010;
+
+# знайти всі машини не з цих  років2008, 2009, 2010
+select *
+from car
+where year != 2008
+  and year != 2009
+  and year != 2010;
+
+# знайти всі машини  де year==price
+select *
+from car
+where year = price;
+
+# знайти всі машини bmw старші за 2014р
+select *
+from car
+where mark = 'BMW'
+  and year < 2014;
+
+# знайти всі машини audi молодші 2014р
+select *
+from car
+where mark = 'AUDI'
+  and year > 2014;
+
+# знайти перші 5 машин
+select *
+from car
+limit 5;
+# знайти останні 5 машин
+select *
+from car
+order by id desc
+limit 5;
+
+# знайти середнє арифметичне цін машини KIA
+select avg(price) as avg_kia
+from car
+where mark like 'KIA';
+
+# знайти середнє арифметичне цін для кожної марки машин окремо
+select count(*), mark, avg(price) as price
+from car
+group by mark;
+
+# підрахувати кількість кожної марки
+select count(*) as count, mark
+from car
+group by mark;
+
+# знайти марку машин кількість яких найбільше
+select count(*) as count, mark
+from car
+group by mark
+order by count desc
+limit 1;
+
+# знайти марку машини в назві яких друга та передостання буква "a"
+select *
+from car
+where car.mark like '%A_';
+
+# знайти всі машини назва моделі яких більше за 3 символів
+select *
+from car
+where length(mark) > 3;
+
+# ***знайти машини ціна котрих більше ніж ціна середнього арифметичного всіх машин
+select mark, avg(price) as prices
+from car
+group by mark
+having avg(price) > (select avg(price) from car)
